@@ -299,7 +299,7 @@ function onContextMenu(data: {}) {
     <div style="display: flex; flex-direction: column; height: 100%; width: 100%">
       <div style="display: flex; flex-direction: row; height: 95%; width: 100%; margin-bottom: 0.5rem">
         <div class="contain" style="height: 100%; width: 60%; overflow: clip">
-          <p>Viewport</p>
+          <p>Схема</p>
           <UDivider/>
           <div
               :style="computed_viewer"
@@ -374,7 +374,7 @@ function onContextMenu(data: {}) {
           ></NuxtImg>
         </div>
         <div class="contain" style="height: 100%; width: 40%; display: flex; flex-direction: column">
-          <p>Reported shapes</p>
+          <p>Компоненты</p>
           <UDivider/>
           <div style="height: 100%; overflow-y: scroll">
             <UTable :columns="columns" :rows="current_data">
@@ -391,9 +391,9 @@ function onContextMenu(data: {}) {
       </div>
       <div
           style="display: flex; flex-direction: row; gap: 1rem; align-items: center; justify-content: center; height: 5%; width: 100%">
-        <UButton label="View clusters" @click="view_clusters" v-bind:disabled="active_process"/>
-        <UButton label="Get report" @click="load_report" v-bind:disabled="active_process" :loading="active_process"/>
-        <UButton class="until-rep" label="Remove Report" @click="remove_report" v-bind:disabled="active_process"/>
+        <UButton label="Получить кластеры" @click="view_clusters" v-bind:disabled="active_process"/>
+        <UButton label="Получить отчет" @click="load_report" v-bind:disabled="active_process" :loading="active_process"/>
+        <UButton class="until-rep" label="Удалить отчет" @click="remove_report" v-bind:disabled="active_process"/>
 
       </div>
     </div>

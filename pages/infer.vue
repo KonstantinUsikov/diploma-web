@@ -233,7 +233,7 @@ function onContextMenu(data: {}) {
       >
         <div class="contain" style="height: 100%; width: 20%; overflow: clip"/>
         <div class="contain" style="height: 100%; width: 60%; overflow: clip">
-          <p>Viewport</p>
+          <p>Схема</p>
           <UDivider />
           <div
               :style="computed_viewer"
@@ -302,13 +302,13 @@ function onContextMenu(data: {}) {
         "
       >
         <UButton
-            label="Load Image"
+            label="Загрузить схему"
             v-bind:disabled="active_process"
             @click="img_load"
         />
         <UButton
             id="send_btn"
-            label="Process Image"
+            label="Обработать схему"
             v-bind:disabled="active_process || has_processed"
             @click="send_img"
         />

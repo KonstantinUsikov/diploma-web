@@ -5,8 +5,8 @@
 <template>
   <div style="height: 100vh; width: 100vw;">
     <div style="height: 3%; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 1rem">
-      <UButton label="Inference" to="/infer" :color=" ( useRoute().path === '/infer') ? 'primary' : 'gray'"/>
-      <UButton label="Reports" to="/reports" :color=" ( useRoute().path === '/reports') ? 'primary' : 'gray'"/>
+      <UButton label="Поиск компонентов" to="/infer" :color=" ( useRoute().path === '/infer') ? 'primary' : 'gray'"/>
+      <UButton label="Отчеты" to="/reports" :color=" ( useRoute().path === '/reports') ? 'primary' : 'gray'"/>
     </div>
     <div style="height: 97%">
       <slot/>
