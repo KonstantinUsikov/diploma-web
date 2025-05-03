@@ -1,5 +1,5 @@
 import {env} from "std-env";
 
 export default defineEventHandler((_event) => {
-    return env.REPORT_HOST
+    return env.CLUSTER_HOST
 })

@@ -24,18 +24,18 @@ onMounted(async () => {
     return;
   }
 
-  let report_host = await useFetch("/api/report_host");
-  await report_host.execute();
-  let report_host_str = report_host.data.value;
-  if (report_host_str == undefined) {
+  let cluster_host = await useFetch("/api/cluster_host");
+  await cluster_host.execute();
+  let cluster_host_str = cluster_host.data.value;
+  if (cluster_host_str == undefined) {
     alert(
-        "backend variable not set (did you set REPORT_HOST in your environment?): " +
-        report_host.error.value,
+        "backend variable not set (did you set CLUSTER_HOST in your environment?): " +
+        cluster_host.error.value,
     );
     return;
   }
 
-  useNetworkStore().setBackendHosts(database_host_str, predict_host_str, report_host_str);
+  useNetworkStore().setBackendHosts(database_host_str, predict_host_str, cluster_host_str);
 });
 </script>
 
