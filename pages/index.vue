@@ -1,11 +1,9 @@
 <script setup lang="ts">
-navigateTo("/infer")
+navigateTo("/recognition")
 </script>
 
 <template>
-
 </template>
 
 <style scoped>
-
 </style>
