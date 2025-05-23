@@ -288,6 +288,71 @@ const try_open_clusters_modal = async () => {
   }
 };
 
+async function deleteUnknownComponent(componentId: number) {
+  has_active_process.value = true;
+  try {
+    for (const cluster of clusters.value) {
+      const index = cluster.components.findIndex(c => c.id === componentId);
+      if (index !== -1) {
+        cluster.components.splice(index, 1);
+        break;
+      }
+    }
+
+    await ofetch(`${useNetworkStore().database_host}/api/db/delete_unknown_components_by_ids`, {
+      method: "POST",
+      body: {
+        component_ids: [componentId]
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+    });
+  } catch {
+    toast.add({
+      title: "Произошла ошибка при удалении компонента",
+      description: "Невозможно обработать запрос",
+      color: "red",
+      icon: 'lucide:x-circle',
+      timeout: 3000
+    });
+  } finally {
+    has_active_process.value = false;
+  }
+}
+
+async function deleteCluster(clusterId: number) {
+  has_active_process.value = true;
+  try {
+    const index = clusters.value.findIndex(c => c.id === clusterId);
+    if (index !== -1) {
+      clusters.value.splice(index, 1);
+    }
+
+    await ofetch(`${useNetworkStore().database_host}/api/db/delete_unknown_components_by_cluster_ids`, {
+      method: "POST",
+      body: {
+        cluster_ids: [clusterId]
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+    });
+  } catch {
+    toast.add({
+      title: "Произошла ошибка при удалении кластера",
+      description: "Невозможно обработать запрос",
+      color: "red",
+      icon: 'lucide:x-circle',
+      timeout: 3000
+    });
+  } finally {
+    has_active_process.value = false;
+  }
+}
+
 
 const {
   original_width,
@@ -560,22 +625,49 @@ const unknown_components_rows = computed(() => {
     <UModal v-model="show_clusters_modal" :ui="{width: 'sm:max-w-[80vw]'}" style="z-index: 3000">
       <UCard>
         <template #header>
-          <h1>Кластеры</h1>
+          <p style="font-weight: bold; font-size: 1.25rem; margin: 0;">
+            Кластеры
+          </p>
         </template>
         <div v-for="cluster in clusters.slice().sort((a, b) => a.label - b.label)" :key="cluster.id">
-          <p>{{ cluster.name }}</p>
+          <div style="display: flex; align-items: center;">
+            <p style="font-weight: bold; font-size: 1.25rem; margin: 0;">
+              {{ cluster.name }}
+            </p>
+            <UButton
+                icon="i-heroicons-x-mark"
+                color="red"
+                size="xs"
+                variant="solid"
+                style="margin-left: 20px"
+                @click="deleteCluster(cluster.id)"
+            />
+          </div>
           <UDivider />
           <Viewer :images="cluster.components.map(c => `data:image/png;base64,${c.image}`)">
-            <div style="display: flex; flex-direction: row; gap: 0.25rem; flex-wrap: wrap">
-              <img
+            <div style="display: flex; flex-direction: row; gap: 0.5rem; flex-wrap: wrap">
+              <div
                   v-for="component in cluster.components"
                   :key="component.id"
-                  :src="`data:image/png;base64,${component.image}`"
-                  style="height: 150px"
-              />
+                  style="position: relative; width: 150px; height: 150px;"
+              >
+                <img
+                    :src="`data:image/png;base64,${component.image}`"
+                    style="width: 100%; height: 100%; object-fit: contain; border-radius: 0.25rem;"
+                />
+                <UButton
+                    icon="i-heroicons-x-mark"
+                    color="red"
+                    size="2xs"
+                    variant="solid"
+                    square
+                    @click="deleteUnknownComponent(component.id)"
+                    style="position: absolute; top: 0px; right: 0px; z-index: 10;"
+                />
+              </div>
             </div>
           </Viewer>
-          <UDivider />
+          <UDivider style="margin-bottom: 30px"/>
         </div>
       </UCard>
     </UModal>
