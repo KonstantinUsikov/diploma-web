@@ -487,7 +487,7 @@ const unknown_components_rows = computed(() => {
                   :border-width="0"
                   :original-width="original_width"
                   :original-height="original_height"
-                  :context-data="c"
+                  :context-data="{ ...c, cluster_label: cluster.label }"
                   @contextmenu="onContextMenuSafe"
               />
             </div>
@@ -505,7 +505,7 @@ const unknown_components_rows = computed(() => {
                   :border-width="0"
                   :original-width="original_width"
                   :original-height="original_height"
-                  :context-data="c"
+                  :context-data="{ ...c, cluster_label: -1 }"
                   @contextmenu="onContextMenuSafe"
               />
             </div>
@@ -571,7 +571,7 @@ const unknown_components_rows = computed(() => {
                 <NuxtImg :src="row.image"></NuxtImg>
               </template>
               <template #action-data="{row}">
-                <UButton label="Download" @click="download_unknown_component(row.id)"/>
+                <UButton label="Скачать" @click="download_unknown_component(row.id)"/>
               </template>
             </UTable>
           </div>
