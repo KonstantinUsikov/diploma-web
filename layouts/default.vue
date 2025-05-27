@@ -5,11 +5,11 @@
 <template>
   <div style="height: 100vh; width: 100vw;">
     <UNotifications />
-    <div style="height: 3%; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 1rem">
+    <div style="height: 5%; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 1rem">
       <UButton label="Поиск компонентов" to="/recognition" :color=" ( useRoute().path === '/recognition') ? 'primary' : 'gray'"/>
       <UButton label="Отчеты" to="/report" :color=" ( useRoute().path === '/report') ? 'primary' : 'gray'"/>
     </div>
-    <div style="height: 97%">
+    <div style="height: 95%">
       <slot/>
     </div>
   </div>

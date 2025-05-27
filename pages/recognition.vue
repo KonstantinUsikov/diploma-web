@@ -295,7 +295,7 @@ const components_columns = [
   { key: "w", label: "W", sortable: true },
   { key: "h", label: "H", sortable: true },
   { key: "class_name", label: "Class name", sortable: true },
-  { key: "confidence", label: "Confidence", sortable: true },
+  { key: "confidence", label: "Conf", sortable: true },
 ];
 
 const components_rows = computed(() => {
@@ -316,10 +316,10 @@ const components_rows = computed(() => {
   <client-only>
     <!-- Занимает всю страницу -->
     <div style="display: flex; flex-direction: column; height: 100%; width: 100%">
-      <!-- Занимает 95% высоты -->
-      <div style="display: flex;flex-direction: row; height: 95%; width: 100%; margin-bottom: 0.5rem;">
+      <!-- Занимает 90% высоты -->
+      <div style="display: flex;flex-direction: row; height: 90%; width: 100%; margin-bottom: 0.5rem;">
         <!-- Контейнер в левой части экрана -->
-        <div class="container" style="height: 100%; width: 20%; display: flex; flex-direction: column; overflow: hidden;">
+        <div class="container" style="height: 100%; width: 25%; display: flex; flex-direction: column; overflow: hidden;">
           <p>Параметры поиска компонентов</p>
           <UDivider style="margin-bottom: 0.6rem;" />
           <!-- Контейнер для параметров поиска компонентов -->
@@ -335,7 +335,7 @@ const components_rows = computed(() => {
         </div>
 
         <!-- Контейнер в центральной части экрана -->
-        <div class="container" style="height: 100%; width: 40%; overflow: clip">
+        <div class="container" style="height: 100%; width: 35%; overflow: clip">
           <p>Схема</p>
           <UDivider />
           <!-- Контейнер с боксами компонентов -->
@@ -404,8 +404,8 @@ const components_rows = computed(() => {
         </div>
       </div>
 
-      <!-- Занимает 5% высоты снизу (для кнопок) -->
-      <div style="display: flex; flex-direction: row; gap: 1rem; align-items: center; justify-content: center; height: 5%; width: 100%;">
+      <!-- Занимает 10% высоты снизу (для кнопок) -->
+      <div style="display: flex; flex-direction: row; gap: 1rem; align-items: center; justify-content: center; height: 10%; width: 100%;">
         <UButton
             label="Загрузить схему"
             :disabled="has_active_process"

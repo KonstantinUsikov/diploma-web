@@ -449,8 +449,8 @@ const unknown_components_rows = computed(() => {
   <client-only>
     <!-- Занимает всю страницу -->
     <div style="display: flex; flex-direction: column; height: 100%; width: 100%">
-      <!-- Занимает 95% высоты -->
-      <div style="display: flex; flex-direction: row; height: 95%; width: 100%; margin-bottom: 0.5rem">
+      <!-- Занимает 90% высоты -->
+      <div style="display: flex; flex-direction: row; height: 90%; width: 100%; margin-bottom: 0.5rem">
         <!-- Контейнер в левой части экрана -->
         <div class="container" style="height: 100%; width: 60%; overflow: clip">
           <p>Схема</p>
@@ -578,8 +578,8 @@ const unknown_components_rows = computed(() => {
         </div>
       </div>
 
-      <!-- Занимает 5% высоты снизу (для кнопок) -->
-      <div style="display: flex; flex-direction: row; gap: 1rem; align-items: center; justify-content: center; height: 5%; width: 100%">
+      <!-- Занимает 10% высоты снизу (для кнопок) -->
+      <div style="display: flex; flex-direction: row; gap: 1rem; align-items: center; justify-content: center; height: 10%; width: 100%">
         <UButton
             label="Получить кластеры"
             :disabled="has_active_process"
