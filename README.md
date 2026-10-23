@@ -1,75 +1,131 @@
-# Nuxt Minimal Starter
+# diploma-web
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Веб-интерфейс для поиска и распознавания компонентов на изображениях электрических схем.
+Это клиентская часть дипломного проекта: само распознавание, хранение результатов и кластеризация
+выполняются отдельными backend-сервисами, а это приложение загружает схемы, отправляет их на обработку
+и показывает результаты.
 
-## Setup
+## Возможности
 
-Make sure to install dependencies:
+### Поиск компонентов (`/recognition`)
+
+- Загрузка схемы в формате PNG, JPG или PDF (для PDF рендерится первая страница с помощью pdf.js).
+- Настройка 23 параметров поиска компонентов (порог бинаризации, удаление линий, морфологические операции,
+  ограничения на размеры компонентов и т. д.). Значения по умолчанию и допустимые диапазоны заданы
+  в `pages/recognition.vue`.
+- Отправка схемы на обработку и отображение результата:
+  - распознанные компоненты выделяются рамками, цвет рамки зависит от класса;
+  - неизвестные компоненты выделяются серыми рамками;
+  - таблица распознанных компонентов: координаты, размеры, класс, уверенность.
+- Просмотр схемы с масштабированием (клик по изображению) и просмотр данных компонента в JSON
+  (правый клик по рамке).
+
+### Отчеты (`/report`)
+
+- Выбор ранее обработанной схемы и загрузка отчета по ней.
+- Таблицы распознанных и неизвестных компонентов (с номером кластера), скачивание изображения
+  любого компонента в PNG.
+- Удаление отчета.
+- Запуск кластеризации неизвестных компонентов, просмотр кластеров, удаление кластера целиком
+  или отдельного компонента.
+
+Корневой маршрут `/` перенаправляет на `/recognition`.
+
+## Технологии
+
+- [Nuxt 3](https://nuxt.com), Vue 3, TypeScript
+- [Nuxt UI](https://ui.nuxt.com) (основной цвет `orange`, серый `zinc`, см. `app.config.ts`)
+- Pinia, VueUse
+- pdfjs-dist для рендеринга PDF
+- v-viewer для просмотра изображений
+- @wdns/vue-code-block для отображения JSON
+
+## Backend-сервисы
+
+Приложение работает с тремя внешними сервисами. Их адреса задаются переменными окружения, которые читаются
+на сервере Nuxt (`server/api/*_host.ts`), запрашиваются клиентом при запуске (`app.vue`) и хранятся
+в Pinia-хранилище `stores/network.ts`.
+
+| Переменная      | Назначение                                     | Используемые эндпоинты |
+|-----------------|------------------------------------------------|------------------------|
+| `PREDICT_HOST`  | распознавание компонентов на схеме             | `POST /api/predict/run_prediction` |
+| `DATABASE_HOST` | хранение схем и найденных компонентов          | `GET /api/db/get_circuits`<br>`GET /api/db/get_components_full_by_circuit_id`<br>`POST /api/db/delete_components_by_circuit_id`<br>`POST /api/db/delete_unknown_components_by_ids`<br>`POST /api/db/delete_unknown_components_by_cluster_ids` |
+| `CLUSTER_HOST`  | кластеризация неизвестных компонентов          | `POST /api/cluster/run_clusterization` |
+
+Если какая-либо переменная не задана, при открытии приложения появится сообщение об ошибке.
+
+Запросы к сервисам отправляются напрямую из браузера, поэтому адреса должны быть доступны с клиентской
+машины, а сервисы должны разрешать CORS-запросы с адреса фронтенда.
+
+## Требования
+
+- Node.js (LTS) и npm
+- Запущенные backend-сервисы распознавания, базы данных и кластеризации
+
+## Установка и запуск
+
+Установите зависимости:
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+Создайте в корне проекта файл `.env` с адресами сервисов (адреса ниже приведены для примера):
 
-Start the development server on `http://localhost:3000`:
+```dotenv
+PREDICT_HOST=http://localhost:8000
+DATABASE_HOST=http://localhost:8001
+CLUSTER_HOST=http://localhost:8002
+```
+
+Файл `.env` не попадает в репозиторий (см. `.gitignore`).
+
+Запустите сервер разработки на `http://localhost:3000`:
 
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+### Production
 
-Build the application for production:
+Сборка приложения:
 
 ```bash
-# npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+Локальный просмотр собранной версии:
 
 ```bash
-# npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Для запуска собранного сервера переменные окружения нужно задать в окружении процесса:
+
+```bash
+PREDICT_HOST=... DATABASE_HOST=... CLUSTER_HOST=... node .output/server/index.mjs
+```
+
+## Структура проекта
+
+```
+├── app.vue                     # корневой компонент, получение адресов сервисов
+├── app.config.ts               # настройки темы Nuxt UI
+├── nuxt.config.ts              # конфигурация Nuxt и подключенные модули
+├── layouts/
+│   └── default.vue             # общий макет с навигацией
+├── pages/
+│   ├── index.vue               # перенаправление на /recognition
+│   ├── recognition.vue         # поиск компонентов на схеме
+│   └── report.vue              # отчеты и кластеры
+├── components/
+│   └── BoundingBox.vue         # рамка компонента поверх изображения схемы
+├── composables/
+│   └── useCircuitImage.ts      # масштабирование рамок и контекстное меню
+├── stores/
+│   └── network.ts              # адреса backend-сервисов
+└── server/api/
+    ├── predict_host.ts         # отдает PREDICT_HOST
+    ├── database_host.ts        # отдает DATABASE_HOST
+    └── cluster_host.ts         # отдает CLUSTER_HOST
+```
